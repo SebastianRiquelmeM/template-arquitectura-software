@@ -1,0 +1,31 @@
+services:
+    bus:
+        image: jrgiadach/soabus:v1
+        ports:
+            - "5000:5000"
+        networks:
+            - my-network
+
+    frontend:
+        build:
+            context: ./frontend
+        depends_on:
+            - bus
+            - backend
+        stdin_open: true
+        tty: true
+        networks:
+            - my-network
+
+    backend:
+        build:
+            context: ./backend
+        depends_on:
+            - bus
+        ports:
+            - "3000:3000"
+        networks:
+            - my-network
+networks:
+    my-network:
+        driver: bridge
